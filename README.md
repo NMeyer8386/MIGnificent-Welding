@@ -1,2 +1,2 @@
-# WN23VXR_Nathaniel_Template
- Template Repository for the winter semester of VXR
+# MIGnificent Welding - Welding In Progress
+ This will be filled out as features are made
