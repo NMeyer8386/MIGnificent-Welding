@@ -16,6 +16,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.feature.vr": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.xr.oculus": "4.1.2",
+        "com.unity.xr.openxr": "1.9.1"
+      }
+    },
     "com.unity.ide.rider": {
       "version": "3.0.27",
       "depth": 0,
@@ -116,7 +125,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
