@@ -2600,6 +2600,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Welding",
+            "id": "5147f7fc-2bf6-4491-afbf-9eb89a5a58f7",
+            "actions": [
+                {
+                    "name": "PullTrigger",
+                    "type": "Value",
+                    "id": "87a7aeaa-7f78-42e6-b28a-5b68b0a93196",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ControllerVelocity",
+                    "type": "Value",
+                    "id": "e4224fde-96d1-4951-a743-5dbb66be0627",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f83291a4-1114-43cd-9f0a-8b4a11480d81",
+                    "path": "<XRController>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PullTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e0a4f1c-5332-43e1-86e0-5b92fa93d0ed",
+                    "path": "<OculusTouchController>/devicePose/velocity",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ControllerVelocity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
