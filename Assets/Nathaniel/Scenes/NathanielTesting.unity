@@ -1800,7 +1800,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9201929595114332536}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9014170783769902054
+--- !u!114 &9014170783769902059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1809,7 +1809,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9014170783769902053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e8461aea6990754f96688b2d6865a57, type: 3}
+  m_Script: {fileID: 11500000, guid: 50fc02eb074c6eb4c94e1c820e94c7f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   velocityProperty:
@@ -1818,7 +1818,7 @@ MonoBehaviour:
       m_Name: Velocity Property
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: d388e01c-1898-42c1-a317-61c41049e7c3
+      m_Id: 8759406f-9c0a-43e1-a3da-c4752c965c0c
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1832,7 +1832,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 9201929595114332536}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9014170785405664027
+--- !u!114 &9014170785405664032
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1841,7 +1841,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9014170785405664026}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e8461aea6990754f96688b2d6865a57, type: 3}
+  m_Script: {fileID: 11500000, guid: 50fc02eb074c6eb4c94e1c820e94c7f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   velocityProperty:
@@ -1850,7 +1850,7 @@ MonoBehaviour:
       m_Name: Velocity Property
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 52dba04b-b982-4dc5-831c-2567c419c2f8
+      m_Id: 3dd5bdce-f463-4093-851a-0d7dc3ceedc6
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1933,11 +1933,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2625564377071688546, guid: 1eabe66146dcfb640a19918c7a719192,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9014170785405664027}
+      addedObject: {fileID: 9014170785405664032}
     - targetCorrespondingSourceObject: {fileID: 8865904923475872816, guid: 1eabe66146dcfb640a19918c7a719192,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9014170783769902054}
+      addedObject: {fileID: 9014170783769902059}
   m_SourcePrefab: {fileID: 100100000, guid: 1eabe66146dcfb640a19918c7a719192, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
