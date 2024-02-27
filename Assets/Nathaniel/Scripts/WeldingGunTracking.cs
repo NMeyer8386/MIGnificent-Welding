@@ -1,5 +1,10 @@
 using System;
+using Eldemarkki.VoxelTerrain.Meshing.MarchingCubes;
+using Eldemarkki.VoxelTerrain.Utilities;
+using Eldemarkki.VoxelTerrain.Utilities.Intersection;
+using Eldemarkki.VoxelTerrain.World;
 using System.Collections;
+using Unity.Mathematics;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -21,6 +26,41 @@ public class WeldingGunTracking : MonoBehaviour
     float gunDistance;
     string gunRotation;
     float triggerPull;
+
+    /// <summary>
+    /// The voxel data store that will be deformed
+    /// </summary>
+    [Header("Terrain Deforming Settings")]
+    [SerializeField] private VoxelWorld voxelWorld;
+
+    /// <summary>
+    /// How fast the terrain is deformed
+    /// </summary>
+    [SerializeField] private float deformSpeed = 0.01f;
+
+    /// <summary>
+    /// How far the deformation can reach
+    /// </summary>
+    [SerializeField] private float deformRange = 3f;
+
+    /// <summary>
+    /// How far away points the player can deform
+    /// </summary>
+    [SerializeField] private float maxReachDistance = Mathf.Infinity;
+
+    /// <summary>
+    /// The game object that the deformation raycast will be cast from
+    /// </summary>
+    [Header("Player Settings")]
+    [SerializeField] private Transform playerCamera;
+
+    private void Update()
+    {
+        if (controllerData.TriggerValue > 0.5f)
+        {
+            RaycastToTerrain();
+        }
+    }
 
     //Grab required components
     private void Awake()
@@ -91,5 +131,41 @@ public class WeldingGunTracking : MonoBehaviour
             gunDistance = hit.distance;
         }
         
+    }
+    private void RaycastToTerrain()
+    {
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, maxReachDistance)) { return; }
+        Vector3 hitPoint = hit.point;
+
+        EditTerrain(hitPoint, deformSpeed, deformRange);
+    }
+    private void EditTerrain(Vector3 point, float deformSpeed, float range)
+    {
+        int buildModifier = 1;
+
+        int hitX = Mathf.RoundToInt(point.x);
+        int hitY = Mathf.RoundToInt(point.y);
+        int hitZ = Mathf.RoundToInt(point.z);
+        int3 hitPoint = new int3(hitX, hitY, hitZ);
+
+        int intRange = Mathf.CeilToInt(range);
+        int3 rangeInt3 = new int3(intRange, intRange, intRange);
+
+        BoundsInt queryBounds = new BoundsInt((hitPoint - rangeInt3).ToVectorInt(), new int3(intRange * 2).ToVectorInt());
+
+        voxelWorld.VoxelDataStore.SetVoxelDataCustom(queryBounds, (voxelDataWorldPosition, voxelData) =>
+        {
+            float distance = math.distance(voxelDataWorldPosition, point);
+            if (distance <= range)
+            {
+                float modificationAmount = deformSpeed / distance * buildModifier;
+                float oldVoxelData = voxelData / 255f;
+                return (byte)math.clamp((oldVoxelData - modificationAmount) * 255, 0, 255);
+            }
+
+            return voxelData;
+        });
     }
 }
