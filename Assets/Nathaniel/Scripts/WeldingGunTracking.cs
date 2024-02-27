@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 using TMPro;
+using UnityEditor.ShaderGraph.Internal;
 
 public class WeldingGunTracking : MonoBehaviour
 {
@@ -18,6 +20,7 @@ public class WeldingGunTracking : MonoBehaviour
     float gunVelocity;
     float gunDistance;
     string gunRotation;
+    float triggerPull;
 
     //Grab required components
     private void Awake()
@@ -27,19 +30,26 @@ public class WeldingGunTracking : MonoBehaviour
 
     private void OnEnable()
     {
-        isGrabbed = true;
         grabInteractable.selectEntered.AddListener(GetControllerData);
+        grabInteractable.selectExited.AddListener(IsReleased);
     }
 
     private void OnDisable()
     {
-        isGrabbed = false;
         grabInteractable.selectEntered.RemoveListener(GetControllerData);
+        grabInteractable.selectExited.RemoveListener(IsReleased);
+    }
+
+    //Sets isGrabbed to false when the gun is not being grabbed
+    private void IsReleased(SelectExitEventArgs arg0)
+    {
+        isGrabbed = false;
     }
 
     //Get controller data from another script
     private void GetControllerData(SelectEnterEventArgs arg0)
     {
+        isGrabbed = true;
         Transform parent = arg0.interactorObject.transform.parent;
 
         if (parent != null)
@@ -58,6 +68,7 @@ public class WeldingGunTracking : MonoBehaviour
             labels[0].text = "Velocity: " + gunVelocity.ToString();
             labels[1].text = "Rotation: " + gunRotation;
             labels[2].text = "Distance: " + gunDistance.ToString();
+            labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
         }
     }
 

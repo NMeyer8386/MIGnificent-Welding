@@ -2628,7 +2628,7 @@
                 {
                     "name": "",
                     "id": "f83291a4-1114-43cd-9f0a-8b4a11480d81",
-                    "path": "<XRController>/trigger",
+                    "path": "<OculusTouchController>/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
