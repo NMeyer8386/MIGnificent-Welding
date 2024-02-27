@@ -142,7 +142,7 @@ namespace Eldemarkki.VoxelTerrain.World
         /// <param name="data">The data that will be associated with the chunk</param>
         public void AddChunkUnchecked(int3 chunkCoordinate, T data)
         {
-            _chunks.Add(chunkCoordinate, data);
+            _chunks.Add(chunkCoordinate, data); ;
         }
 
         /// <summary>

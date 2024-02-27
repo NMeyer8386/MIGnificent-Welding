@@ -9,6 +9,7 @@ namespace Eldemarkki.VoxelTerrain.World.Chunks
     /// </summary>
     public class ChunkProvider : MonoBehaviour
     {
+        public GameObject chunkParent;
         /// <summary>
         /// The world for which to provide chunks for
         /// </summary>
@@ -22,7 +23,7 @@ namespace Eldemarkki.VoxelTerrain.World.Chunks
         protected ChunkProperties CreateUnloadedChunkToCoordinate(int3 chunkCoordinate)
         {
             int3 worldPosition = chunkCoordinate * VoxelWorld.WorldSettings.ChunkSize;
-            GameObject chunkGameObject = Instantiate(VoxelWorld.WorldSettings.ChunkPrefab, worldPosition.ToVectorInt(), Quaternion.identity);
+            GameObject chunkGameObject = Instantiate(VoxelWorld.WorldSettings.ChunkPrefab, worldPosition.ToVectorInt(), Quaternion.identity, chunkParent.transform);
 
             ChunkProperties chunkProperties = new ChunkProperties
             {
@@ -35,6 +36,8 @@ namespace Eldemarkki.VoxelTerrain.World.Chunks
             chunkProperties.Initialize(chunkCoordinate, VoxelWorld.WorldSettings.ChunkSize);
 
             VoxelWorld.ChunkStore.AddChunk(chunkCoordinate, chunkProperties);
+
+            chunkGameObject.transform.position *= .01f;
 
             return chunkProperties;
         }

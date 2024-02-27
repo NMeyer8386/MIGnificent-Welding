@@ -19,6 +19,7 @@ public class WeldingGunTracking : MonoBehaviour
     ControllerData controllerData;
     [SerializeField] Transform raycastTransform;
     [SerializeField] TMP_Text[] labels;
+    public Transform parentTransform;
 
     //Variable stuff
     bool isGrabbed = false;
@@ -53,14 +54,6 @@ public class WeldingGunTracking : MonoBehaviour
     /// </summary>
     [Header("Player Settings")]
     [SerializeField] private Transform playerCamera;
-
-    private void Update()
-    {
-        if (controllerData.TriggerValue > 0.5f)
-        {
-            RaycastToTerrain();
-        }
-    }
 
     //Grab required components
     private void Awake()
@@ -108,7 +101,12 @@ public class WeldingGunTracking : MonoBehaviour
             labels[0].text = "Velocity: " + gunVelocity.ToString();
             labels[1].text = "Rotation: " + gunRotation;
             labels[2].text = "Distance: " + gunDistance.ToString();
-            labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
+            //labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
+
+            if (controllerData.TriggerValue > 0.5f)
+            {
+                RaycastToTerrain();
+            }
         }
     }
 
@@ -134,10 +132,10 @@ public class WeldingGunTracking : MonoBehaviour
     }
     private void RaycastToTerrain()
     {
-        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        Ray ray = new Ray(raycastTransform.position, raycastTransform.right);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, maxReachDistance)) { return; }
-        Vector3 hitPoint = hit.point;
+        Vector3 hitPoint = hit.point / .01f;
 
         EditTerrain(hitPoint, deformSpeed, deformRange);
     }
