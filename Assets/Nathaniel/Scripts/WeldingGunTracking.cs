@@ -55,6 +55,12 @@ public class WeldingGunTracking : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private Transform playerCamera;
 
+    /// <summary>
+    /// The game object that the deformation raycast will be cast from
+    /// </summary>
+    [Header("Voxel Position")]
+    [SerializeField] private Transform voxelPosition;
+
     //Grab required components
     private void Awake()
     {
@@ -135,11 +141,32 @@ public class WeldingGunTracking : MonoBehaviour
         Ray ray = new Ray(raycastTransform.position, raycastTransform.right);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, maxReachDistance)) { return; }
-        Vector3 hitPoint = hit.point / .01f;
 
-        EditTerrain(hitPoint, deformSpeed, deformRange);
+        // Check if the hit has a collider
+        if (hit.collider != null)
+        {
+            // Access the parent transform of the collider
+            Transform parentTransform = hit.collider.transform.parent;
+
+            if (parentTransform != null)
+            {
+                VoxelWorld voxelWorld = parentTransform.parent.GetComponent<VoxelWorld>();
+
+                Vector3 hitPoint = hit.point;
+
+                Vector3 offset = parentTransform.transform.position;
+
+                // Calculate the new position by subtracting offset to the current position
+                Vector3 newPosition = hitPoint - offset;
+
+                // Move the object to the new position
+                hitPoint = newPosition / .01f;
+
+                EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld);
+            }
+        }
     }
-    private void EditTerrain(Vector3 point, float deformSpeed, float range)
+    private void EditTerrain(Vector3 point, float deformSpeed, float range, VoxelWorld voxelWorld)
     {
         int buildModifier = 1;
 
