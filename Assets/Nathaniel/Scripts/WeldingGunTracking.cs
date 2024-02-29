@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
 using TMPro;
-using UnityEditor.ShaderGraph.Internal;
 
 public class WeldingGunTracking : MonoBehaviour
 {
