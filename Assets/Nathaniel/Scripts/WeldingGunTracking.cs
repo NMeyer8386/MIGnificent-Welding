@@ -48,18 +48,6 @@ public class WeldingGunTracking : MonoBehaviour
     /// </summary>
     [SerializeField] private float maxReachDistance = Mathf.Infinity;
 
-    /// <summary>
-    /// The game object that the deformation raycast will be cast from
-    /// </summary>
-    [Header("Player Settings")]
-    [SerializeField] private Transform playerCamera;
-
-    /// <summary>
-    /// The game object that the deformation raycast will be cast from
-    /// </summary>
-    [Header("Voxel Position")]
-    [SerializeField] private Transform voxelPosition;
-
     //Grab required components
     private void Awake()
     {
@@ -106,7 +94,7 @@ public class WeldingGunTracking : MonoBehaviour
             labels[0].text = "Velocity: " + gunVelocity.ToString();
             labels[1].text = "Rotation: " + gunRotation;
             labels[2].text = "Distance: " + gunDistance.ToString();
-            //labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
+            labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
 
             if (controllerData.TriggerValue > 0.5f)
             {
@@ -137,7 +125,7 @@ public class WeldingGunTracking : MonoBehaviour
     }
     private void RaycastToTerrain()
     {
-        Ray ray = new Ray(raycastTransform.position, raycastTransform.right);
+        Ray ray = new Ray(raycastTransform.position, raycastTransform.forward);
 
         if (!Physics.Raycast(ray, out RaycastHit hit, maxReachDistance)) { return; }
 
@@ -147,22 +135,26 @@ public class WeldingGunTracking : MonoBehaviour
             // Access the parent transform of the collider
             Transform parentTransform = hit.collider.transform.parent;
 
-            if (parentTransform != null)
+            //If we don't use a try catch then unity throws a hissy fit of nullreferenceexceptions
+            try { parentTransform.parent.TryGetComponent<VoxelWorld>(out VoxelWorld voxelWorld); }
+
+            catch (NullReferenceException)
             {
-                VoxelWorld voxelWorld = parentTransform.parent.GetComponent<VoxelWorld>();
-
-                Vector3 hitPoint = hit.point;
-
-                Vector3 offset = parentTransform.transform.position;
-
-                // Calculate the new position by subtracting offset to the current position
-                Vector3 newPosition = hitPoint - offset;
-
-                // Move the object to the new position
-                hitPoint = newPosition / .01f;
-
-                EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld);
+                Debug.Log("their ass is NOT welding");
+                return;
             }
+
+            Vector3 hitPoint = hit.point;
+
+            Vector3 offset = parentTransform.transform.position;
+
+            // Calculate the new position by subtracting offset to the current position
+            Vector3 newPosition = hitPoint - offset;
+
+            // Move the object to the new position
+            hitPoint = newPosition / .01f;
+
+            EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld); 
         }
     }
     private void EditTerrain(Vector3 point, float deformSpeed, float range, VoxelWorld voxelWorld)
