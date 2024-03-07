@@ -18,14 +18,15 @@ public class WeldingGunTracking : MonoBehaviour
     ControllerData controllerData;
     [SerializeField] Transform raycastTransform;
     [SerializeField] TMP_Text[] labels;
-    public Transform parentTransform;
+    [SerializeField] Transform parentTransform;
 
     //Variable stuff
-    bool isGrabbed = false;
-    float gunVelocity;
-    float gunDistance;
-    string gunRotation;
-    float triggerPull;
+    public bool isGrabbed { get; private set; } = false;
+    public float gunVelocity { get; private set; }
+    public string gunRotation { get; private set; }
+    public float gunDistance { get; private set; }
+    public float gunTrigger { get; private set; }
+    public float angleToPlaneX { get; private set; }
 
     /// <summary>
     /// The voxel data store that will be deformed
@@ -94,7 +95,8 @@ public class WeldingGunTracking : MonoBehaviour
             labels[0].text = "Velocity: " + gunVelocity.ToString();
             labels[1].text = "Rotation: " + gunRotation;
             labels[2].text = "Distance: " + gunDistance.ToString();
-            labels[3].text = "Trigger: " + controllerData.TriggerValue.ToString();
+            //labels[3].text = "Trigger: " + gunTrigger.ToString();
+            labels[3].text = "Angle: " + angleToPlaneX.ToString();
 
             if (controllerData.TriggerValue > 0.5f)
             {
@@ -105,23 +107,36 @@ public class WeldingGunTracking : MonoBehaviour
 
     private void GetVelocityRotationDistance()
     {
-        //Velocity based on controller velocity
+        // Velocity based on controller velocity
         if (controllerData)
         {
             gunVelocity = controllerData.Velocity.magnitude;
         }
 
-        //Model rotation
-        gunRotation = gameObject.transform.rotation.eulerAngles.ToString();
-
-        //Distance from tip to surface
+        // Distance from tip to surface
         RaycastHit hit;
-        Ray gunRay = new Ray(raycastTransform.position, raycastTransform.right);
+        Ray gunRay = new Ray(raycastTransform.position, raycastTransform.forward);
         if (Physics.Raycast(gunRay, out hit))
         {
             gunDistance = hit.distance;
+
+            // Calculate angles between gun direction and plane normal in x, y, and z axes
+            Vector3 gunDirection = raycastTransform.forward;
+
+            if (parentTransform != null)
+            {
+                Vector3 pointOnPlane = parentTransform.position;
+                Vector3 gunToPlane = pointOnPlane - raycastTransform.position;
+                angleToPlaneX = Vector3.Angle(gunDirection, new Vector3(gunToPlane.x, 0, 0));
+            }
+            else
+            {
+                Debug.LogError("Plane transform not assigned!");
+            }
         }
-        
+
+        // Trigger Pull
+        gunTrigger = controllerData.TriggerValue;
     }
     private void RaycastToTerrain()
     {

@@ -65,9 +65,9 @@ Material:
     - _Glossiness: 0
     - _Metallic: 0
     m_Colors:
-    - NegativeYColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
-    - XColor: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 1}
-    - YColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - ZColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    - NegativeYColor: {r: 1, g: 1, b: 1, a: 1}
+    - XColor: {r: 0.27525544, g: 1, b: 0, a: 1}
+    - YColor: {r: 1, g: 1, b: 1, a: 1}
+    - ZColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
