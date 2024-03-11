@@ -17,6 +17,7 @@ public class WeldingGunTracking : MonoBehaviour
     XRGrabInteractable grabInteractable;
     XRBaseController controller;
     ControllerData controllerData;
+    [SerializeField] GameObject weldUI;
     [SerializeField] Transform raycastTransform;
     [SerializeField] TMP_Text[] labels;
     [SerializeField] Transform parentTransform;
@@ -56,6 +57,7 @@ public class WeldingGunTracking : MonoBehaviour
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
         audioSource = GetComponent<AudioSource>();
+        weldUI.SetActive(isGrabbed);
     }
 
     private void OnEnable()
@@ -74,12 +76,14 @@ public class WeldingGunTracking : MonoBehaviour
     private void IsReleased(SelectExitEventArgs arg0)
     {
         isGrabbed = false;
+        weldUI.SetActive(isGrabbed);
     }
 
     //Get controller data from another script
     private void GetControllerData(SelectEnterEventArgs arg0)
     {
         isGrabbed = true;
+        weldUI.SetActive(isGrabbed);
         Transform parent = arg0.interactorObject.transform.parent;
 
         if (parent != null)
@@ -104,18 +108,18 @@ public class WeldingGunTracking : MonoBehaviour
              *  labels[3].text = "Angle: " + angleToPlaneX.ToString();
             */
 
+            //Play sounds
+            PlaySoundOnTrigger(controllerData.TriggerValue > 0.5f);
+
+            //Run haptics
+            RunHapticsOnTrigger(controllerData.TriggerValue > 0.5f);
+
             //If trigger is being pressed...
             if (controllerData.TriggerValue > 0.5f)
             {
                 //...Make terrain
                 RaycastToTerrain();
             }
-
-            //Play sounds
-            PlaySoundOnTrigger(controllerData.TriggerValue > 0.5f);
-
-            //Run haptics
-            RunHapticsOnTrigger(controllerData.TriggerValue > 0.5f);
         }
     }
 

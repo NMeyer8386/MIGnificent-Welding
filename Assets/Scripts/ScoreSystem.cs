@@ -31,6 +31,15 @@ public class ScoreSystem : MonoBehaviour
     public float speedOutput { get; private set; }
     public float score { get; private set; }
 
+    float minAngle;
+    float maxAngle;
+
+    float minSpeed;
+    float maxSpeed;
+
+    float minDistance;
+    float maxDistance;
+
     [Tab("UI")]
     [Header("UI Components")]
     [SerializeField] UnityEngine.UI.Image angleVisual;
@@ -41,6 +50,14 @@ public class ScoreSystem : MonoBehaviour
     void Start()
     {
         score = 0;
+        minAngle = targetAngle - acceptableAngle;
+        maxAngle = targetAngle + acceptableAngle;
+
+        minDistance = targetDistance - acceptableDistance;
+        maxDistance = targetDistance + acceptableDistance;
+
+        minSpeed = targetSpeed - acceptableSpeed;
+        maxSpeed = targetSpeed + acceptableSpeed;
     }
 
     // Update is called once per frame
@@ -61,30 +78,31 @@ public class ScoreSystem : MonoBehaviour
     /// Calculate the portion of the score related to rotation
     /// </summary>
     /// <returns></returns>
-    private float RotationScoreing() 
+    private float RotationScoreing()
     {
-        float minAngle = targetAngle - acceptableAngle;
-        float maxAngle = targetAngle + acceptableAngle;
+        float thing;
 
         if (GunTracking.angleToPlaneX >= minAngle && GunTracking.angleToPlaneX <= maxAngle)
         {
             // Angle is within the desired range
-            return 0f;
+            thing = 0f;
         }
         else if (GunTracking.angleToPlaneX < 0 || GunTracking.angleToPlaneX > 90)
         {
-            return -1f;
+            thing = -1f;
         }
         else if (GunTracking.angleToPlaneX < minAngle)
         {
             // Angle is less than the minimum desired angle
-            return -Mathf.Pow((minAngle - GunTracking.angleToPlaneX) / (minAngle - 0), 2f);
+            thing = -Mathf.Pow((minAngle - GunTracking.angleToPlaneX) / (minAngle - 0), 2f);
         }
         else
         {
             // Angle is greater than the maximum desired angle
-            return Mathf.Pow((GunTracking.angleToPlaneX - maxAngle) / (90 - maxAngle), 2f);
+            thing = Mathf.Pow((GunTracking.angleToPlaneX - maxAngle) / (90 - maxAngle), 2f);
         }
+        //Debug.Log(thing);
+        return thing;
     }
 
     /// <summary>
@@ -93,8 +111,6 @@ public class ScoreSystem : MonoBehaviour
     /// <returns></returns>
     private float SpeedScoreing()
     {
-        float minSpeed= targetSpeed - acceptableSpeed;
-        float maxSpeed = targetSpeed + acceptableSpeed;
 
         if (GunTracking.gunVelocity >= minSpeed && GunTracking.gunVelocity <= maxSpeed)
         {
@@ -123,8 +139,6 @@ public class ScoreSystem : MonoBehaviour
     /// <returns></returns>
     private float DistanceScoreing()
     {
-        float minDistance = targetDistance - acceptableDistance;
-        float maxDistance = targetDistance + acceptableDistance;
 
         if (GunTracking.gunDistance >= minDistance && GunTracking.gunDistance <= maxDistance)
         {
@@ -157,13 +171,16 @@ public class ScoreSystem : MonoBehaviour
     {
         //Angle
         //Use lerp to move image between min/max angle, pass absolute of angle to get lerp value
-        angleVisual.transform.localPosition = new Vector3(Mathf.Lerp(-11, 11, Mathf.Abs(angle)), 0, 0);
+        float angleLerp = Mathf.Lerp(-11, 11, (1 + angle) / 2);
+        angleVisual.transform.localPosition = new Vector3(angleLerp, 0, 0);
 
         //Speed
-        speedVisual.transform.localPosition = new Vector3(Mathf.Lerp(-11, 11, Mathf.Abs(speed)), 0, 0);
+        float speedLerp = Mathf.Lerp(-1, 62, 1 - Mathf.Abs(speed));
+        speedVisual.transform.localPosition = new Vector3(0, speedLerp, 0);
 
         //Distance
-        distanceVisual.transform.localPosition = new Vector3(Mathf.Lerp(62, -1, Mathf.Abs(distance)), 0, 0);
+        float distanceLerp = Mathf.Lerp(-62, 2, 1 - Mathf.Abs(distance));
+        distanceVisual.transform.localPosition = new Vector3(0, distanceLerp, 0);
     }
 
     private float ScoreTotal()
