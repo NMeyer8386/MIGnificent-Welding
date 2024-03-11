@@ -13,16 +13,16 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] WeldingGunTracking GunTracking;
 
     [Header("Angle Settings")]
-    [SerializeField] float targetAngle;
-    [SerializeField] float acceptableAngle;
+    [SerializeField] float targetAngle = 45f;
+    [SerializeField] float acceptableAngle = 5f;
 
     [Header("Speed Settings")]
-    [SerializeField] float targetSpeed;
-    [SerializeField] float acceptableSpeed;
+    [SerializeField] float targetSpeed = .04f;
+    [SerializeField] float acceptableSpeed = .01f;
 
     [Header("Distance Settings")]
-    [SerializeField] float targetDistance;
-    [SerializeField] float acceptableDistance;
+    [SerializeField] float targetDistance = .06f;
+    [SerializeField] float acceptableDistance = .015f;
 
     public float angleOutput { get; private set; }
     public float distanceOutput { get; private set; }
