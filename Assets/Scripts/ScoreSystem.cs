@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using VInspector;
 
 public class ScoreSystem : MonoBehaviour
 {
+    [Tab("Score")]
     /// <summary>
     /// Welder Tracking System
     /// </summary>
@@ -29,6 +31,12 @@ public class ScoreSystem : MonoBehaviour
     public float speedOutput { get; private set; }
     public float score { get; private set; }
 
+    [Tab("UI")]
+    [Header("UI Components")]
+    [SerializeField] UnityEngine.UI.Image angleVisual;
+    [SerializeField] UnityEngine.UI.Image speedVisual;
+    [SerializeField] UnityEngine.UI.Image distanceVisual;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +51,9 @@ public class ScoreSystem : MonoBehaviour
             angleOutput = RotationScoreing();
             speedOutput = SpeedScoreing();
             distanceOutput = DistanceScoreing();
+
+            DisplayScoreOnUI(angleOutput, speedOutput, distanceOutput);
+
             score += ScoreTotal();
         }
     }
@@ -135,6 +146,26 @@ public class ScoreSystem : MonoBehaviour
             return Mathf.Pow((GunTracking.gunDistance - maxDistance) / (0.3f - maxDistance), 2f);
         }
     }
+
+    /// <summary>
+    /// Uses the params passed to display optimal angle/speed/distance on UI components
+    /// </summary>
+    /// <param name="angle">angleOutput Variable</param>
+    /// <param name="speed">speedOutput Variable</param>
+    /// <param name="distance">distanceOutput Variable</param>
+    private void DisplayScoreOnUI(float angle, float speed, float distance)
+    {
+        //Angle
+        //Use lerp to move image between min/max angle, pass absolute of angle to get lerp value
+        angleVisual.transform.localPosition = new Vector3(Mathf.Lerp(-11, 11, Mathf.Abs(angle)), 0, 0);
+
+        //Speed
+        speedVisual.transform.localPosition = new Vector3(Mathf.Lerp(-11, 11, Mathf.Abs(speed)), 0, 0);
+
+        //Distance
+        distanceVisual.transform.localPosition = new Vector3(Mathf.Lerp(62, -1, Mathf.Abs(distance)), 0, 0);
+    }
+
     private float ScoreTotal()
     {
         //Get the inverse for a max score per catagory of welding
