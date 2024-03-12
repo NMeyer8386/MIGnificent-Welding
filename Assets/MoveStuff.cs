@@ -7,23 +7,17 @@ public class MoveStuff : MonoBehaviour
 {
     [SerializeField] Transform map;
 
-    List<GameObject> chunks;
     XRGrabInteractable grabInteractable;
     bool isGrabbed = false;
     // Start is called before the first frame update
     void Start()
     {
-        // Create a list of chunks to use later
-        foreach (Transform child in map)
-        {
-            chunks.Add(child.gameObject);
-        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
     private void Awake()
     {
@@ -43,7 +37,10 @@ public class MoveStuff : MonoBehaviour
     }
     void IsReleased(SelectExitEventArgs arg0)
     {
+        Debug.Log("HERE");
         isGrabbed = false;
+        transform.GetComponent<Rigidbody>().isKinematic = false;
+        StartCoroutine(RotateToNormal());
     }
     /// <summary>
     /// Set the Chuck Meshes as convex
@@ -51,11 +48,10 @@ public class MoveStuff : MonoBehaviour
     void SetConvex(SelectEnterEventArgs arg0)
     {
         isGrabbed = true;
-        for(int i = 0; i < chunks.Count; i++)
+        foreach (Transform child in map)
         {
-            chunks[i].GetComponent<MeshCollider>().convex = true;
+        child.GetComponent<MeshCollider>().convex = true;
         }
-        transform.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     /// <summary>
@@ -63,31 +59,17 @@ public class MoveStuff : MonoBehaviour
     /// </summary>
     void unSetConvex()
     {
-        for (int i = 0; i < chunks.Count; i++)
-        {
-            chunks[i].GetComponent<MeshCollider>().convex = false;
-        }
+
         transform.GetComponent<Rigidbody>().isKinematic = true;
+        foreach (Transform child in map)
+        {
+            child.GetComponent<MeshCollider>().convex = false;
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    IEnumerator RotateToNormal()
     {
-        if(collision.collider.tag == "table" && isGrabbed == false)
-        {
-            StartCoroutine("RotateToNormal");
-        }
-    }
-    IEnumerable RotateToNormal()
-    {
-        float timer = 0;
-        Vector3 current = transform.rotation.eulerAngles;
-        float y = transform.rotation.y;
-        while(timer < 0.5f)
-        {
-            timer += Time.deltaTime;
-            Vector3.Lerp(current, new Vector3(-90, y, 0), timer / 0.5f);
-            yield return null;
-        }
+        yield return new WaitForSeconds(.5f);
         unSetConvex();
     }
 }
