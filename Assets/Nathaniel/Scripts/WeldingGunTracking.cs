@@ -15,10 +15,13 @@ public class WeldingGunTracking : MonoBehaviour
 {
     //Gameobject stuff
     XRGrabInteractable grabInteractable;
+    XRBaseController controller;
     ControllerData controllerData;
+    [SerializeField] GameObject weldUI;
     [SerializeField] Transform raycastTransform;
     [SerializeField] TMP_Text[] labels;
     [SerializeField] Transform parentTransform;
+    AudioSource audioSource;
 
     //Variable stuff
     public bool isGrabbed { get; private set; } = false;
@@ -53,6 +56,8 @@ public class WeldingGunTracking : MonoBehaviour
     private void Awake()
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
+        audioSource = GetComponent<AudioSource>();
+        weldUI.SetActive(isGrabbed);
     }
 
     private void OnEnable()
@@ -71,17 +76,20 @@ public class WeldingGunTracking : MonoBehaviour
     private void IsReleased(SelectExitEventArgs arg0)
     {
         isGrabbed = false;
+        weldUI.SetActive(isGrabbed);
     }
 
     //Get controller data from another script
     private void GetControllerData(SelectEnterEventArgs arg0)
     {
         isGrabbed = true;
+        weldUI.SetActive(isGrabbed);
         Transform parent = arg0.interactorObject.transform.parent;
 
         if (parent != null)
         {
             controllerData = parent.GetComponent<ControllerData>();
+            controller = parent.GetComponent<XRBaseController>();
         }
     }
 
@@ -89,21 +97,54 @@ public class WeldingGunTracking : MonoBehaviour
     {
         if (isGrabbed)
         {
-            //Update values on screen
+            //Get required values
             GetVelocityRotationDistance();
 
-            labels[0].text = "Velocity: " + gunVelocity.ToString();
-            labels[1].text = "Rotation: " + gunRotation;
-            labels[2].text = "Distance: " + gunDistance.ToString();
-            //labels[3].text = "Trigger: " + gunTrigger.ToString();
-            labels[3].text = "Angle: " + angleToPlaneX.ToString();
+            /*  Update debug display
+             *  labels[0].text = "Velocity: " + gunVelocity.ToString();
+             *  labels[1].text = "Rotation: " + gunRotation;
+             *  labels[2].text = "Distance: " + gunDistance.ToString();
+             *  labels[3].text = "Trigger: " + gunTrigger.ToString();
+             *  labels[3].text = "Angle: " + angleToPlaneX.ToString();
+            */
 
+            //Play sounds
+            PlaySoundOnTrigger(controllerData.TriggerValue > 0.5f);
+
+            //Run haptics
+            RunHapticsOnTrigger(controllerData.TriggerValue > 0.5f);
+
+            //If trigger is being pressed...
             if (controllerData.TriggerValue > 0.5f)
             {
+                //...Make terrain
                 RaycastToTerrain();
             }
         }
     }
+
+    private void PlaySoundOnTrigger(bool triggerPressed)
+    {
+        if (!audioSource.isPlaying && triggerPressed)
+        {
+            audioSource.Play();
+        } else if (audioSource.isPlaying && !triggerPressed) 
+        {
+            audioSource.Pause();
+        }
+        
+    }
+
+    private void RunHapticsOnTrigger(bool triggerPressed)
+    {
+        if (triggerPressed)
+        {
+            controller.SendHapticImpulse(0.5f, 0.1f);
+        }
+
+    }
+
+    
 
     private void GetVelocityRotationDistance()
     {
@@ -169,7 +210,7 @@ public class WeldingGunTracking : MonoBehaviour
             // Move the object to the new position
             hitPoint = newPosition / .01f;
 
-            EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld); 
+            EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld);
         }
     }
     private void EditTerrain(Vector3 point, float deformSpeed, float range, VoxelWorld voxelWorld)

@@ -8,19 +8,20 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: VertexColorMaterial
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
   m_Parent: {fileID: 2100000, guid: c2eca18a2803d54449f926cc46aa4ce0, type: 2}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ModifiedSerializedProperties: 16
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords:
   - _COLORCOLOR_ON
   - _FLIPBOOKBLENDING_OFF
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2450
   stringTagMap:
-    RenderType: Opaque
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - GRABPASS
   m_LockedProperties: 
@@ -28,8 +29,12 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
+    m_Colors:
+    - _BaseColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0.53333336}
+    - _Color: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0.53333336}
   m_BuildTextureStacks: []
 --- !u!114 &2550770114618453521
 MonoBehaviour:

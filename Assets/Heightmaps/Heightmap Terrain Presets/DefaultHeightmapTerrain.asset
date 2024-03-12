@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 440bc03213899e148bed19eec6e99127, type: 3}
   m_Name: DefaultHeightmapTerrain
   m_EditorClassIdentifier: 
-  heightmap: {fileID: 2800000, guid: 4bf5d59767cd43943ab0eca979a933c6, type: 3}
-  amplitude: 1
+  heightmap: {fileID: 2800000, guid: 2d515491edbe04c419349aed2320a738, type: 3}
+  amplitude: 15
   heightOffset: 0
