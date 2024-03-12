@@ -12997,6 +12997,7 @@ GameObject:
   - component: {fileID: 1661281318}
   - component: {fileID: 1661281317}
   - component: {fileID: 1661281316}
+  - component: {fileID: 1661281320}
   m_Layer: 0
   m_Name: Welding Ticket
   m_TagString: Untagged
@@ -13027,7 +13028,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1661281314}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
   m_Name: 
@@ -13241,6 +13242,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: -0.0001, y: 0.18761313, z: 0.49788237}
   m_Center: {x: -1.07409, y: 0.96154374, z: 0.023235023}
+--- !u!114 &1661281320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661281314}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71c6a347878d184dbdc61123d7f0006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  map: {fileID: 801151229}
 --- !u!43 &1683053272
 Mesh:
   m_ObjectHideFlags: 0

@@ -205,10 +205,10 @@ public class WeldingGunTracking : MonoBehaviour
             Vector3 offset = parentTransform.transform.position;
 
             // Calculate the new position by subtracting offset to the current position
-            Vector3 newPosition = hitPoint - offset;
-
+            //Vector3 newPosition = hitPoint - offset;
+            Vector3 localHitPoint = parentTransform.InverseTransformPoint(hitPoint);
             // Move the object to the new position
-            hitPoint = newPosition / .01f;
+            hitPoint = localHitPoint / .01f;
 
             EditTerrain(hitPoint, deformSpeed, deformRange, voxelWorld);
         }
