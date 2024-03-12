@@ -40,6 +40,9 @@ public class ScoreSystem : MonoBehaviour
     float minDistance;
     float maxDistance;
 
+    int frameCount = 0;
+    float[] speedArray = new float[5];
+
     [Tab("UI")]
     [Header("UI Components")]
     [SerializeField] UnityEngine.UI.Image angleVisual;
@@ -69,7 +72,7 @@ public class ScoreSystem : MonoBehaviour
             speedOutput = SpeedScoreing();
             distanceOutput = DistanceScoreing();
 
-            DisplayScoreOnUI(angleOutput, speedOutput, distanceOutput);
+            DisplayScoreOnUI(angleOutput, speedOutput, GunTracking.gunDistance);
 
             score += ScoreTotal();
         }
@@ -171,16 +174,47 @@ public class ScoreSystem : MonoBehaviour
     {
         //Angle
         //Use lerp to move image between min/max angle, pass absolute of angle to get lerp value
-        float angleLerp = Mathf.Lerp(-11, 11, (1 + angle) / 2);
+        float angleLerp = Mathf.Lerp(-11f, 11f, Mathf.Abs(angle));
         angleVisual.transform.localPosition = new Vector3(angleLerp, 0, 0);
 
         //Speed
-        float speedLerp = Mathf.Lerp(-1, 62, 1 - Mathf.Abs(speed));
-        speedVisual.transform.localPosition = new Vector3(0, speedLerp, 0);
+        //Use array to average speed every 5 frames
+        speedArray[frameCount] = speed; 
+        frameCount++;
+        float speedTotal = 0;
+        if (frameCount >= 5)
+        {
+            foreach(float speedFloat in speedArray)
+            {
+                speedTotal += speedFloat;
+            }
+            speedTotal = speedTotal / speedArray.Length;
+            float invSpeedLerp = Mathf.InverseLerp(0.08f, 0f, Mathf.Round(speedTotal * 1000) / 1000);
+            float speedLerp = Mathf.Lerp(-1f, 62f, invSpeedLerp);
+            speedVisual.transform.localPosition = new Vector3(0, speedLerp, 0);
+            frameCount = 0;
+        }
+        if (speed <= 0.05f && speed >= 0.03f)
+        {
+            speedVisual.color = Color.green;
+        }
+        else
+        {
+            speedVisual.color = Color.yellow;
+        }
 
         //Distance
-        float distanceLerp = Mathf.Lerp(-62, 2, 1 - Mathf.Abs(distance));
+        float invDistanceLerp = Mathf.InverseLerp(.2f, 0f, distance);
+        float distanceLerp = Mathf.Lerp(-62f, 2f, invDistanceLerp);
         distanceVisual.transform.localPosition = new Vector3(0, distanceLerp, 0);
+        if (distance <= 0.07f && distance >= 0.05f)
+        {
+            distanceVisual.color = Color.green;
+        }
+        else
+        {
+            distanceVisual.color = Color.yellow;
+        }
     }
 
     private float ScoreTotal()
